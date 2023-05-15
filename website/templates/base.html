@@ -28,21 +28,47 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar">
                 <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" id="home" href="/">
+                        Home
+                    </a>
+                    <a class="nav-item nav-link" id="logout" href="/logout">
+                        Logout
+                    </a>
+                    {% else %}
                     <a class="nav-item nav-link" id="login" href="/login">
                         Login
                     </a>
                     <a class="nav-item nav-link" id="sign-up" href="/sign-up">
                         Sing Up
-                    </a>
-                    <a class="nav-item nav-link" id="logout" href="/logout">
-                        Logout
-                    </a>
-                    <a class="nav-item nav-link" id="home" href="/">
-                        Home
-                    </a>
+                    </a> 
+                    {% endif %}
                 </div>
             </div>
         </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissable fade show", role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissable fade show", role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <br/>
         <div class="container">
             {% block content %}
@@ -63,5 +89,17 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"
         ></script>
+        {% block javascript %}
+        <script type="text/javascript">
+        function deleteNote(noteId) {
+            fetch("/delete-note", {
+                method: "POST",
+                body: JSON.stringify({ noteId: noteId }),
+            }).then((_res) => {
+                window.location.href = "/";
+            });
+        }
+        </script>
+        {% endblock %}
     </body>
 </html>
