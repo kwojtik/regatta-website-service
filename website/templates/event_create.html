@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Event creation{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <h3 align="center">Create an event!</h3>
+    <div class="form-group">
+        <label fpr="rname">Regatta name</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="rname" 
+            name="rname" 
+            placeholder="Enter name" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="country">Country</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="country" 
+            name="country" 
+            placeholder="Enter country" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="place">Place</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="place" 
+            name="place" 
+            placeholder="Enter place" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="adress">Adress</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="adress" 
+            name="adress" 
+            placeholder="Enter adress" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="rdate">Date</label>
+        <input 
+            type="date" 
+            class="form-control" 
+            id="rdate" 
+            name="rdate"
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="rtime">Regatta start</label>
+        <input 
+            type="time" 
+            class="form-control" 
+            id="rtime" 
+            name="rtime"
+        />
+    </div>
+    <button 
+        type="submit" 
+        class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

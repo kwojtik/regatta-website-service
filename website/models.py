@@ -15,13 +15,14 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
     notes = db.relationship('Note')
 
 class Regatta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     regname = db.Column(db.String(256))
-    regstart = db.Column(db.Time)
-    regattadate = db.Column(db.Data)
+    regstart = db.Column(db.String(9))
+    regattadate = db.Column(db.Date)
     country = db.Column(db.String(100))
     place = db.Column(db.String(100))
     address = db.Column(db.String(100))

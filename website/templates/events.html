@@ -1,0 +1,45 @@
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block content %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md mx-auto">
+            <h1 class="fw-light">Events</h1>
+            <p class="lead text-body-secondary">
+                Here you can add regatta events that you organize or sing up you and your crew to an event!
+            </p>
+            <p>
+                <a href="/events/create" class="btn btn-primary my-2">Create an event!</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+    <div class="album py-5 bg-body-teritary">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for row in regatta %}
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">
+                        <h1 class="fw-light">
+                            {{ row.regname }}
+                        </h1>
+                        Country: {{ row.country }} </br>
+                        Place: {{ row.place }} </br>
+                        Adress: {{ row.address }} </br>
+                        Date: {{ row.regattadate }} </br>
+                        Regatta start: {{ row.regstart }} </br>
+                    </p>
+                    <div class="btn-group">
+                        <button class="btn btn-dark rounded-pill px-3" type="button">Sing up!</button>
+                    </div>
+                </div>
+
+            </div>
+                
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

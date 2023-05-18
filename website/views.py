@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import Note
+from .models import Note, Regatta
 from . import db
 import json
 
@@ -37,3 +37,19 @@ def delete_note():
             db.session.commit()
 
     return jsonify({})
+
+@views.route('/events', methods=['GET', 'POST'])
+@login_required
+def events():
+    regatta = db.session.query(Regatta).order_by(Regatta.id.desc()).all()
+    return render_template("events.html", user=current_user, regatta=regatta)
+
+@views.route('/archive', methods=['GET', 'POST'])
+@login_required
+def archive():
+    return render_template("archive.html", user=current_user)
+
+@views.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
