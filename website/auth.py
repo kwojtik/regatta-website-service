@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User, Regatta, Organizer
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
+import json
 
 auth = Blueprint('auth', __name__)
 
@@ -98,3 +99,11 @@ def event_create():
             return redirect(url_for('views.events'))
         
     return render_template("event_create.html", user=current_user)
+
+
+@auth.route('/events/sign_up/<int:regatta_id>')
+@login_required
+def event_signup(regatta_id):
+    # Tutaj możesz dodać logikę obsługi rejestracji na dane wydarzenie
+    regatta = Regatta.query.get(regatta_id)
+    return render_template('event_sign_up.html', user=current_user, regatta=regatta)

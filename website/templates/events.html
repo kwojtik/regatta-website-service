@@ -32,14 +32,16 @@
                         Regatta start: {{ row.regstart }} </br>
                     </p>
                     <div class="btn-group">
-                        <button class="btn btn-dark rounded-pill px-3" type="button">Sing up!</button>
-                    </div>
+                        
+                    </div><button class="btn btn-outline-primary" type="button" onClick="redirectToSignup({{ row.id }})">Sing up!</button>
                 </div>
-
             </div>
-                
-
             {% endfor %}
         </div>
     </div>
+    <script>
+        function redirectToSignup(regattaId) {
+            window.location.href = '/events/sign_up/' + regattaId;
+        }
+    </script>
 {% endblock %}

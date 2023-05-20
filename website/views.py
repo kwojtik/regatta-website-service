@@ -41,7 +41,7 @@ def delete_note():
 @views.route('/events', methods=['GET', 'POST'])
 @login_required
 def events():
-    regatta = db.session.query(Regatta).order_by(Regatta.id.desc()).all()
+    regatta = db.session.query(Regatta).all()
     return render_template("events.html", user=current_user, regatta=regatta)
 
 @views.route('/archive', methods=['GET', 'POST'])
