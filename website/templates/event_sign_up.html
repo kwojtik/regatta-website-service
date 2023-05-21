@@ -1,6 +1,85 @@
 {% extends "base.html" %} 
 {% block title %}Event sign up{% endblock %} 
 {% block content %}
-    <h1 align="center">Event sign up</h1>
+<form method="POST">
+    <h3 align="center">Sing Up</h3>
+    <div class="form-group">
+        <label fpr="crewName">Crew Name</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="crewName" 
+            name="crewName" 
+            placeholder="Enter name of the crew" 
+        />
+    </div>
+    <label for="members">Participants:</label>
+    <div id="members-container">
+        <div id="members-container">
+            <input type="email" name="member" placeholder="E-mail adress" required>
+        </div>
+    </div>
 
+        <button 
+            type="button" 
+            class="btn btn-secondary"
+            onclick="addMember()">Add crewmate
+        </button>
+
+    <br><br> 
+    <div class="form-group">
+        <label fpr="boatName">Boat Name</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="boatName" 
+            name="boatName" 
+            placeholder="Enter boat name" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="boatModel">Boat Model</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="boatModel" 
+            name="boatModel" 
+            placeholder="Enter boat model" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="boatType">Boat Type</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="boatType" 
+            name="boatType" 
+            placeholder="Enter boat type" 
+        />
+    </div>
+    <div class="form-group">
+        <label fpr="boatRegNo">Boat Registration Number</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="boatRegNo" 
+            name="boatRegNo" 
+            placeholder="Enter boat registration number" 
+        />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    function addMember() {
+        const membersContainer = document.getElementById('members-container');
+        const input = document.createElement('input');
+        input.type = 'email';
+        input.name = 'member';
+        input.placeholder = 'E-mail adress';
+        input.required = true;
+        membersContainer.appendChild(input);
+    }
+</script>
 {% endblock %}

@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
-from .models import User, Regatta, Organizer
+from .models import User, Regatta, Organizer, Participant, Crew, Boat, Sponsor
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 import json
+from sqlalchemy import update
 
 auth = Blueprint('auth', __name__)
 
@@ -76,19 +77,31 @@ def event_create():
         adress = request.form.get('adress')
         rdate = datetime.strptime(request.form.get('rdate'), '%Y-%m-%d')
         rtime = request.form.get('rtime')
+        rinfo = request.form.get('reginfo')
 
-        if len(rname) < 1:
+        regNameCheck = Regatta.query.filter_by(regname=rname).first()
+        if(regNameCheck):
+            flash('Regatta with that name already exists!', category='error')
+        elif len(rname) < 1:
             flash('Regatta name should be longer than 1 character.', category='error')
         elif not country or not place or not rdate or not rtime:
             flash('Every field should filled', category='error')
         else:
-            new_regatta = Regatta(regname=rname, regstart=rtime, regattadate=rdate, country=country, place=place, address=adress)
+            new_regatta = Regatta(regname=rname, regstart=rtime, regattadate=rdate, country=country, place=place, address=adress, regInfo=rinfo)
             db.session.add(new_regatta)
             db.session.commit()
 
             userid = current_user.id
             regid = db.select(Regatta.id).filter_by(regname=rname)
-            #regid = reg.id
+
+            for i in range(1, 6):
+                sponsorName = request.form.get(f'sponsorName_{i}')
+                donation = request.form.get(f'donation_{i}')
+
+                if sponsorName and donation:
+                    new_sponsor = Sponsor(sponsor_name=sponsorName, donation=donation, regatta_id=regid)
+                    db.session.add(new_sponsor)
+                    db.session.commit()
 
             new_organizer = Organizer(user_id=userid, regatta_id=regid)
             db.session.add(new_organizer)
@@ -101,9 +114,57 @@ def event_create():
     return render_template("event_create.html", user=current_user)
 
 
-@auth.route('/events/sign_up/<int:regatta_id>')
+@auth.route('/events/sign_up/<int:regatta_id>', methods=['GET', 'POST'])
 @login_required
 def event_signup(regatta_id):
-    # Tutaj możesz dodać logikę obsługi rejestracji na dane wydarzenie
-    regatta = Regatta.query.get(regatta_id)
+    regatta = Regatta.query.get(regatta_id)   
+
+    if request.method == 'POST':
+        crewName = request.form.get('crewName')
+        members = request.form.getlist('member')
+        boatName = request.form.get('boatName')
+        boatModel = request.form.get('boatModel')
+        boatType = request.form.get('boatType')
+        boatRegNo = request.form.get('boatRegNo')
+
+        tmp = True
+
+        if not crewName or not boatName or not boatModel or not boatType  or not boatRegNo:
+            flash('All fields should be filled', category='error')
+            tmp = False
+        else:
+            findBoatId = Boat.query.filter_by(reg_no=boatRegNo).first()
+            boatid = db.select(Boat.id).filter_by(reg_no=boatRegNo)
+
+            if not findBoatId:
+                new_Boat = Boat(boat_name=boatName, model=boatModel, type=boatType, reg_no=boatRegNo)
+                db.session.add(new_Boat)
+                db.session.commit()
+                boatid = db.select(Boat.id).filter_by(reg_no=boatRegNo)
+            else:
+                update(Boat).where(id == boatid).values(boat_name=boatName, model=boatModel, type=boatType)
+                db.session.commit()
+
+
+            new_crew = Crew(crew_name=crewName, regatta_id=regatta_id, boat_id=boatid)
+            db.session.add(new_crew)
+            db.session.commit()
+
+            findCrewId = Crew.query.filter_by(crew_name=crewName, regatta_id=regatta_id).first()
+
+            for i in range(len(members)):
+                crewMate = User.query.filter_by(email=members[i]).first()
+                if crewMate:
+                    new_Participant = Participant(user_id=crewMate.id, crew_id=findCrewId.id)
+                    db.session.add(new_Participant)
+                    db.session.commit()
+                else:
+                    tmp = False
+                    flash('User doesn\'t exists.', category='error')
+
+            if tmp: 
+                flash('Registered!', category='success')
+
+
     return render_template('event_sign_up.html', user=current_user, regatta=regatta)
+

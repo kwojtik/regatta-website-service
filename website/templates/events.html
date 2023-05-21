@@ -32,8 +32,9 @@
                         Regatta start: {{ row.regstart }} </br>
                     </p>
                     <div class="btn-group">
-                        
-                    </div><button class="btn btn-outline-primary" type="button" onClick="redirectToSignup({{ row.id }})">Sing up!</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="redirectToSignup({{ row.id }})">Sign up!</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="redirectToInfo({{ row.id }})">Info</button>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -42,6 +43,9 @@
     <script>
         function redirectToSignup(regattaId) {
             window.location.href = '/events/sign_up/' + regattaId;
+        }
+        function redirectToInfo(regattaId) {
+            window.location.href = '/events/info/' + regattaId;
         }
     </script>
 {% endblock %}

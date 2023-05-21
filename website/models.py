@@ -26,6 +26,7 @@ class Regatta(db.Model):
     country = db.Column(db.String(100))
     place = db.Column(db.String(100))
     address = db.Column(db.String(100))
+    regInfo = db.Column(db.String(1000))
 
 class Sponsor(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -62,8 +62,50 @@
             name="rtime"
         />
     </div>
+    <div class="form-group">
+        <label fpr="reginfo">Info</label>
+        <textarea
+            class="form-control" 
+            id="reginfo" 
+            name="reginfo" 
+        >Regatta description</textarea>
+    </div>
+    <label for="sponsors">Sponsors (max 6):</label>
+    <div id="sponsors-container">
+        <div class="sponsor">
+            <input type="text" name="sponsorName_1" placeholder="Sponsor name" required>
+            <input type="text" name="donation_1" placeholder="Donation" required>
+        </div>
+    </div>
+
+    <button type="button" onclick="addsponsor()">Dodaj członka</button>
     <button 
         type="submit" 
         class="btn btn-primary">Submit</button>
 </form>
+
+
+<script>
+    function addSponsor() {
+        const sponsorsContainer = document.getElementById('sponsors-container');
+        const sponsorDiv = document.createElement('div');
+        sponsorDiv.className = 'sponsor';
+
+        const sponsorInput = document.createElement('input');
+        sponsorInput.type = 'text';
+        sponsorInput.name = `sponsorName_${sponsorsContainer.childElementCount + 1}`;
+        sponsorInput.placeholder = 'Sponsor name';
+        sponsorInput.required = true;
+        sponsorDiv.appendChild(sponsorInput);
+
+        const donationInput = document.createElement('input');
+        donationInput.type = 'text';
+        donationInput.name = `donation_${sponsorsContainer.childElementCount + 1}`;
+        donationInput.placeholder = 'Donation';
+        donationInput.required = true;
+        sponsorDiv.appendChild(donationInput);
+
+        sponsorsContainer.appendChild(sponsorDiv);
+    }
+</script>
 {% endblock %}
